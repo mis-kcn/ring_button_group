@@ -16,11 +16,11 @@ and the Flutter guide for
 This package provides a configurable component to support a group of buttons
 displayed on a sized ring.
 
-<img src="./images/demo.png" title="" alt="" width="561">
+<img src="https://github.com/xeric/ring_button_group/raw/main/images/demo.png" title="" alt="" width="561">
 
 ## Features
 
-<img src="./images/demo.gif" title="" alt="" width="561">
+<img src="https://github.com/xeric/ring_button_group/raw/main/images/demo.gif" title="" alt="" width="561">
 
 ## Getting started
 
