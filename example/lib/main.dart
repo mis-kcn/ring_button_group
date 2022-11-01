@@ -1,4 +1,4 @@
-import 'package:cyclic_button_group/cyclic_button_group.dart';
+import 'package:ring_button_group/ring_button_group.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(title: 'Ring Button Group'),
     );
   }
 }
@@ -75,7 +75,7 @@ class _MyHomePageState extends State<MyHomePage> {
               child: SizedBox(
                 width: 200,
                 height: 200,
-                child: CyclicButtonGroup(
+                child: RingButtonGroup(
                   buttonNumber: 5,
                   icons: const [
                     Icon(Icons.abc, color: Colors.white,),
@@ -84,7 +84,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     Icon(Icons.dangerous, color: Colors.white,),
                     Icon(Icons.e_mobiledata, color: Colors.white,),
                   ],
-                  type: CyclicButtonGroupType.MULTIPLE_SELECTABLE,
+                  type: RingButtonGroupType.MULTIPLE_SELECTABLE,
                   pressedIndex: const {1},
                   shadowEffect: true,
                   onPressed: (index, selected) {  },
@@ -100,7 +100,7 @@ class _MyHomePageState extends State<MyHomePage> {
               child: SizedBox(
                 width: 200,
                 height: 200,
-                child: CyclicButtonGroup(
+                child: RingButtonGroup(
                   disabled: true,
                   buttonNumber: 6,
                   buttonSize: 60,
@@ -112,7 +112,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     Text("V"),
                     Text("VI"),
                   ],
-                  type: CyclicButtonGroupType.SINGLE_SELECTABLE,
+                  type: RingButtonGroupType.SINGLE_SELECTABLE,
                   pressedIndex: const {1},
                   onPressed: (index, selected) {  },
                 ),
@@ -127,7 +127,7 @@ class _MyHomePageState extends State<MyHomePage> {
               child: SizedBox(
                 width: 200,
                 height: 200,
-                child: CyclicButtonGroup(
+                child: RingButtonGroup(
                   buttonNumber: 6,
                   buttonSize: 50,
                   toneColor: Colors.deepOrange,
@@ -142,7 +142,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     Text("5", style: TextStyle(color: Colors.white),),
                     Text("6", style: TextStyle(color: Colors.white),),
                   ],
-                  type: CyclicButtonGroupType.SINGLE_SELECTABLE,
+                  type: RingButtonGroupType.SINGLE_SELECTABLE,
                   // pressedIndex: {},
                   onPressed: (index, selected) {
                     setState(() {

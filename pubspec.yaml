@@ -1,7 +1,7 @@
-name: cyclic_button_group
-description: A new Flutter package project.
+name: ring_button_group
+description: provide a configurable component to support a group of buttons displayed on a sized ring.
 version: 1.0.0
-homepage: https://github.com/xeric/cyclic_button_group
+homepage: https://github.com/xeric/ring_button_group
 
 environment:
   sdk: '>=2.18.2 <3.0.0'

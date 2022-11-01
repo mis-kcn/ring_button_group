@@ -1,10 +1,10 @@
-library cyclic_button_group;
+library ring_button_group;
 
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
-class CyclicButtonGroup extends StatefulWidget {
-  //how many buttons on cycle
+class RingButtonGroup extends StatefulWidget {
+  //how many buttons on ring
   final int buttonNumber;
 
   //list button index (start from 0) pressed at beginning, notice, when type is SINGLE_SELECTABLE, set size must less 2
@@ -16,10 +16,10 @@ class CyclicButtonGroup extends StatefulWidget {
   //entire group disabled
   final bool disabled;
 
-  //type of behavior - see: CyclicButtonGroupType
-  final CyclicButtonGroupType type;
+  //type of behavior - see: RingButtonGroupType
+  final RingButtonGroupType type;
 
-  //cycle button size |<-size->|----o----|------|(bulleye)
+  //ring button size |<-size->|----o----|------|(bulleye)
   final double buttonSize;
 
   //main color of button
@@ -46,20 +46,20 @@ class CyclicButtonGroup extends StatefulWidget {
   //labels on button, size must be same with buttonNumber
   final List<Text>? labels;
 
-  //child widget of cycle button
+  //child widget of ring button group
   final Widget? child;
 
   //allow shadow effects when button pressed
   final bool shadowEffect;
 
-  const CyclicButtonGroup({
+  const RingButtonGroup({
     super.key,
     required this.buttonNumber,
     this.pressedIndex = const {},
     this.onPressed,
     this.buttonSize = 40,
     this.disabled = false,
-    this.type = CyclicButtonGroupType.SINGLE_SELECTABLE,
+    this.type = RingButtonGroupType.SINGLE_SELECTABLE,
     this.toneColor = Colors.blueAccent,
     this.tintColor = Colors.blueGrey,
     this.activeColor = Colors.lightBlueAccent,
@@ -70,17 +70,18 @@ class CyclicButtonGroup extends StatefulWidget {
     this.labels,
     this.child,
     this.shadowEffect = false,
-  })  : assert(labels != null ? labels.length == buttonNumber : true),
+  })  : assert(buttonNumber > 1),
+        assert(labels != null ? labels.length == buttonNumber : true),
         assert(icons != null ? icons.length == buttonNumber : true),
-        assert(type == CyclicButtonGroupType.SINGLE_SELECTABLE
+        assert(type == RingButtonGroupType.SINGLE_SELECTABLE
             ? pressedIndex.length < 2
             : true);
 
   @override
-  State<StatefulWidget> createState() => CyclicButtonGroupState();
+  State<StatefulWidget> createState() => RingButtonGroupState();
 }
 
-class CyclicButtonGroupState extends State<CyclicButtonGroup> {
+class RingButtonGroupState extends State<RingButtonGroup> {
   late ButtonStatus status;
 
   @override
@@ -107,11 +108,11 @@ class CyclicButtonGroupState extends State<CyclicButtonGroup> {
               if (!widget.disabled) {
                 setState(() {
                   switch (widget.type) {
-                    case CyclicButtonGroupType.SINGLE_SELECTABLE:
+                    case RingButtonGroupType.SINGLE_SELECTABLE:
                       status.pressed.clear();
                       status.pressed.add(index);
                       break;
-                    case CyclicButtonGroupType.MULTIPLE_SELECTABLE:
+                    case RingButtonGroupType.MULTIPLE_SELECTABLE:
                       !status.pressed.remove(index)
                           ? status.pressed.add(index)
                           : null;
@@ -121,7 +122,7 @@ class CyclicButtonGroupState extends State<CyclicButtonGroup> {
 
                   widget.onPressed!(
                       index,
-                      widget.type == CyclicButtonGroupType.MULTIPLE_SELECTABLE
+                      widget.type == RingButtonGroupType.MULTIPLE_SELECTABLE
                           ? status._pressed
                           : null);
 
@@ -143,7 +144,7 @@ class CyclicButtonGroupState extends State<CyclicButtonGroup> {
                       widthFactor: 1,
                       heightFactor: 1,
                       child: CustomPaint(
-                          painter: CyclicButtonPainter(
+                          painter: RingButtonPainter(
                               toneColor: widget.toneColor,
                               tintColor: widget.tintColor,
                               activeColor: widget.activeColor,
@@ -158,7 +159,7 @@ class CyclicButtonGroupState extends State<CyclicButtonGroup> {
                               shadowEffect: widget.shadowEffect,
                               pressDown: status._pressedDown == index)),
                     ),
-                    CyclicButtonIcon(
+                    RingButtonIcon(
                       index: index,
                       buttonSize: widget.buttonSize,
                       size: constraints.minWidth,
@@ -180,7 +181,7 @@ class CyclicButtonGroupState extends State<CyclicButtonGroup> {
   }
 }
 
-class CyclicButtonIcon extends Positioned {
+class RingButtonIcon extends Positioned {
   final int index;
   final int total;
 
@@ -188,7 +189,7 @@ class CyclicButtonIcon extends Positioned {
   final double buttonSize;
   //double right;
 
-  CyclicButtonIcon(
+  RingButtonIcon(
       {super.key,
       required this.index,
       required this.total,
@@ -213,7 +214,7 @@ class CyclicButtonIcon extends Positioned {
   }
 }
 
-class CyclicButtonPainter extends CustomPainter {
+class RingButtonPainter extends CustomPainter {
   final Color toneColor;
   final Color tintColor;
   final Color activeColor;
@@ -230,7 +231,7 @@ class CyclicButtonPainter extends CustomPainter {
 
   Path path = Path();
 
-  CyclicButtonPainter(
+  RingButtonPainter(
       {required this.toneColor,
       required this.buttonNumber,
       required this.buttonSize,
@@ -374,7 +375,7 @@ class ButtonStatus {
 
 typedef OnPressedFunction = Function(int index, Set<int>? selected);
 
-enum CyclicButtonGroupType {
+enum RingButtonGroupType {
   PRESS_ONLY,
   SINGLE_SELECTABLE,
   MULTIPLE_SELECTABLE
