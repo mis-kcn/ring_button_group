@@ -94,87 +94,86 @@ class RingButtonGroupState extends State<RingButtonGroup> {
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
       var widgets = <Widget>[];
-      widgets.addAll([
-        for (var i = 0; i < widget.buttonNumber; i++) i
-      ].map((index) => GestureDetector(
-            onTapCancel: () {
-              if (!widget.disabled) {
-                setState(() {
-                  status._pressedDown = null;
-                });
-              }
-            },
-            onTapUp: (detial) {
-              if (!widget.disabled) {
-                setState(() {
-                  switch (widget.type) {
-                    case RingButtonGroupType.SINGLE_SELECTABLE:
-                      status.pressed.clear();
-                      status.pressed.add(index);
-                      break;
-                    case RingButtonGroupType.MULTIPLE_SELECTABLE:
-                      !status.pressed.remove(index)
-                          ? status.pressed.add(index)
-                          : null;
-                      break;
-                    default:
+      widgets.addAll([for (var i = 0; i < widget.buttonNumber; i++) i]
+          .map((index) => GestureDetector(
+                onTapCancel: () {
+                  if (!widget.disabled) {
+                    setState(() {
+                      status._pressedDown = null;
+                    });
                   }
+                },
+                onTapUp: (detial) {
+                  if (!widget.disabled) {
+                    setState(() {
+                      switch (widget.type) {
+                        case RingButtonGroupType.SINGLE_SELECTABLE:
+                          status.pressed.clear();
+                          status.pressed.add(index);
+                          break;
+                        case RingButtonGroupType.MULTIPLE_SELECTABLE:
+                          !status.pressed.remove(index)
+                              ? status.pressed.add(index)
+                              : null;
+                          break;
+                        default:
+                      }
 
-                  widget.onPressed!(
-                      index,
-                      widget.type == RingButtonGroupType.MULTIPLE_SELECTABLE
-                          ? status._pressed
-                          : null);
+                      widget.onPressed!(
+                          index,
+                          widget.type == RingButtonGroupType.MULTIPLE_SELECTABLE
+                              ? status._pressed
+                              : null);
 
-                  status._pressedDown = null;
-                });
-              }
-            },
-            onTapDown: (detial) {
-              setState(() {
-                status._pressedDown = index;
-              });
-            },
-            child: FractionallySizedBox(
-                widthFactor: 1,
-                heightFactor: 1,
-                child: Stack(
-                  children: [
-                    FractionallySizedBox(
-                      widthFactor: 1,
-                      heightFactor: 1,
-                      child: CustomPaint(
-                          painter: RingButtonPainter(
-                              toneColor: widget.toneColor,
-                              tintColor: widget.tintColor,
-                              activeColor: widget.activeColor,
-                              disableColor: widget.disableColor,
-                              disableBorderColor: widget.disableBorderColor,
-                              borderColor: widget.borderColor,
-                              buttonNumber: widget.buttonNumber,
-                              buttonSize: widget.buttonSize,
-                              buttonIndex: index,
-                              pressed: status.pressed.contains(index),
-                              disabled: widget.disabled,
-                              shadowEffect: widget.shadowEffect,
-                              pressDown: status._pressedDown == index)),
-                    ),
-                    RingButtonIcon(
-                      index: index,
-                      buttonSize: widget.buttonSize,
-                      size: constraints.minWidth,
-                      total: widget.buttonNumber,
-                      child: FractionalTranslation(
-                          translation: const Offset(-0.5, -0.5),
-                          child: widget.icons != null
-                              ? widget.icons![index]
-                              : widget.labels != null
-                                  ? widget.labels![index]
-                                  : null),
-                    ),
-                  ],
-                )),
-          )));
+                      status._pressedDown = null;
+                    });
+                  }
+                },
+                onTapDown: (detial) {
+                  setState(() {
+                    status._pressedDown = index;
+                  });
+                },
+                child: FractionallySizedBox(
+                    widthFactor: 1,
+                    heightFactor: 1,
+                    child: Stack(
+                      children: [
+                        FractionallySizedBox(
+                          widthFactor: 1,
+                          heightFactor: 1,
+                          child: CustomPaint(
+                              painter: RingButtonPainter(
+                                  toneColor: widget.toneColor,
+                                  tintColor: widget.tintColor,
+                                  activeColor: widget.activeColor,
+                                  disableColor: widget.disableColor,
+                                  disableBorderColor: widget.disableBorderColor,
+                                  borderColor: widget.borderColor,
+                                  buttonNumber: widget.buttonNumber,
+                                  buttonSize: widget.buttonSize,
+                                  buttonIndex: index,
+                                  pressed: status.pressed.contains(index),
+                                  disabled: widget.disabled,
+                                  shadowEffect: widget.shadowEffect,
+                                  pressDown: status._pressedDown == index)),
+                        ),
+                        RingButtonIcon(
+                          index: index,
+                          buttonSize: widget.buttonSize,
+                          size: constraints.minWidth,
+                          total: widget.buttonNumber,
+                          child: FractionalTranslation(
+                              translation: const Offset(-0.5, -0.5),
+                              child: widget.icons != null
+                                  ? widget.icons![index]
+                                  : widget.labels != null
+                                      ? widget.labels![index]
+                                      : null),
+                        ),
+                      ],
+                    )),
+              )));
       widget.child != null ? widgets.add(widget.child!) : null;
       return Stack(children: widgets);
     });
@@ -375,11 +374,7 @@ class ButtonStatus {
 
 typedef OnPressedFunction = Function(int index, Set<int>? selected);
 
-enum RingButtonGroupType {
-  PRESS_ONLY,
-  SINGLE_SELECTABLE,
-  MULTIPLE_SELECTABLE
-}
+enum RingButtonGroupType { PRESS_ONLY, SINGLE_SELECTABLE, MULTIPLE_SELECTABLE }
 
 Color getGreyScale(Color orginalColor) {
   int gray = (orginalColor.red * 0.199).toInt() +
