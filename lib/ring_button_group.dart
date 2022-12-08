@@ -1,5 +1,7 @@
 library ring_button_group;
 
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
@@ -55,26 +57,26 @@ class RingButtonGroup extends StatefulWidget {
   //the width of line split the button, note that this is not the border of circle
   final double splitStrokeSize;
 
-  const RingButtonGroup({
-    super.key,
-    required this.buttonNumber,
-    this.pressedIndex = const {},
-    this.onPressed,
-    this.buttonSize = 40,
-    this.disabled = false,
-    this.type = RingButtonGroupType.SINGLE_SELECTABLE,
-    this.toneColor = Colors.blueAccent,
-    this.tintColor = Colors.blueGrey,
-    this.activeColor = Colors.lightBlueAccent,
-    this.disableBorderColor = Colors.lightBlueAccent,
-    this.disableColor = Colors.blueAccent,
-    this.borderColor = Colors.lightBlueAccent,
-    this.icons,
-    this.labels,
-    this.child,
-    this.shadowEffect = false,
-    this.splitStrokeSize = 0.5
-  })  : assert(buttonNumber > 1),
+  const RingButtonGroup(
+      {super.key,
+      required this.buttonNumber,
+      this.pressedIndex = const {},
+      this.onPressed,
+      this.buttonSize = 40,
+      this.disabled = false,
+      this.type = RingButtonGroupType.SINGLE_SELECTABLE,
+      this.toneColor = Colors.blueAccent,
+      this.tintColor = Colors.blueGrey,
+      this.activeColor = Colors.lightBlueAccent,
+      this.disableBorderColor = Colors.lightBlueAccent,
+      this.disableColor = Colors.blueAccent,
+      this.borderColor = Colors.lightBlueAccent,
+      this.icons,
+      this.labels,
+      this.child,
+      this.shadowEffect = false,
+      this.splitStrokeSize = 0.5})
+      : assert(buttonNumber > 1),
         assert(labels != null ? labels.length == buttonNumber : true),
         assert(icons != null ? icons.length == buttonNumber : true),
         assert(type == RingButtonGroupType.SINGLE_SELECTABLE ? pressedIndex.length < 2 : true);
@@ -200,7 +202,12 @@ class RingButtonGroupState extends State<RingButtonGroup> {
       ));
 
       widget.child != null ? widgets.add(widget.child!) : null;
-      return Stack(children: widgets);
+      return Center(
+        child: AspectRatio(
+          aspectRatio: 1,
+          child: Stack(children: widgets),
+        ),
+      );
     });
   }
 }

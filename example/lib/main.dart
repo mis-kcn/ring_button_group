@@ -126,7 +126,7 @@ class _MyHomePageState extends State<MyHomePage> {
               // in the middle of the parent.
               child: SizedBox(
                 width: 200,
-                height: 200,
+                height: 220,
                 child: RingButtonGroup(
                   buttonNumber: 6,
                   buttonSize: 50,
