@@ -78,16 +78,31 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: RingButtonGroup(
                   buttonNumber: 5,
                   icons: const [
-                    Icon(Icons.abc, color: Colors.white,),
-                    Icon(Icons.baby_changing_station, color: Colors.white,),
-                    Icon(Icons.cabin, color: Colors.white,),
-                    Icon(Icons.dangerous, color: Colors.white,),
-                    Icon(Icons.e_mobiledata, color: Colors.white,),
+                    Icon(
+                      Icons.abc,
+                      color: Colors.white,
+                    ),
+                    Icon(
+                      Icons.baby_changing_station,
+                      color: Colors.white,
+                    ),
+                    Icon(
+                      Icons.cabin,
+                      color: Colors.white,
+                    ),
+                    Icon(
+                      Icons.dangerous,
+                      color: Colors.white,
+                    ),
+                    Icon(
+                      Icons.e_mobiledata,
+                      color: Colors.white,
+                    ),
                   ],
                   type: RingButtonGroupType.MULTIPLE_SELECTABLE,
                   pressedIndex: const {1},
                   shadowEffect: true,
-                  onPressed: (index, selected) {  },
+                  onPressed: (index, selected) async => true,
                 ),
               ),
             ),
@@ -114,7 +129,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   ],
                   type: RingButtonGroupType.SINGLE_SELECTABLE,
                   pressedIndex: const {1},
-                  onPressed: (index, selected) {  },
+                  onPressed: (index, selected) async => true,
                 ),
               ),
             ),
@@ -135,31 +150,49 @@ class _MyHomePageState extends State<MyHomePage> {
                   activeColor: Colors.deepOrange.shade200,
                   tintColor: Colors.deepOrange.shade400,
                   labels: const [
-                    Text("1", style: TextStyle(color: Colors.white),),
-                    Text("2", style: TextStyle(color: Colors.white),),
-                    Text("3", style: TextStyle(color: Colors.white),),
-                    Text("4", style: TextStyle(color: Colors.white),),
-                    Text("5", style: TextStyle(color: Colors.white),),
-                    Text("6", style: TextStyle(color: Colors.white),),
+                    Text(
+                      "1",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    Text(
+                      "2",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    Text(
+                      "3",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    Text(
+                      "4",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    Text(
+                      "5",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    Text(
+                      "6",
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ],
                   type: RingButtonGroupType.SINGLE_SELECTABLE,
                   // pressedIndex: {},
-                  onPressed: (index, selected) {
+                  onPressed: (index, selected) async {
                     setState(() {
                       displayName = "Test $index";
                     });
+                    return true;
                   },
                   child: Center(
                     child: Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.orange),
-                        borderRadius: BorderRadius.circular(40),
-                        boxShadow: const [BoxShadow(blurStyle: BlurStyle.outer, color: Colors.black12, blurRadius: 5)],
-                      ),
-                      width: 80,
-                      height: 80,
-                      child: Center(child: Text(displayName))
-                      ),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.orange),
+                          borderRadius: BorderRadius.circular(40),
+                          boxShadow: const [BoxShadow(blurStyle: BlurStyle.outer, color: Colors.black12, blurRadius: 5)],
+                        ),
+                        width: 80,
+                        height: 80,
+                        child: Center(child: Text(displayName))),
                   ),
                 ),
               ),

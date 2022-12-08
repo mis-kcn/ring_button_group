@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
 class RingButtonGroup extends StatefulWidget {
+  static Future<bool> alwaysTrue(int i, selected) async => false;
+
   //how many buttons on ring
   final int buttonNumber;
 
@@ -61,7 +63,7 @@ class RingButtonGroup extends StatefulWidget {
       {super.key,
       required this.buttonNumber,
       this.pressedIndex = const {},
-      this.onPressed,
+      this.onPressed = alwaysTrue,
       this.buttonSize = 40,
       this.disabled = false,
       this.type = RingButtonGroupType.SINGLE_SELECTABLE,
@@ -106,22 +108,24 @@ class RingButtonGroupState extends State<RingButtonGroup> {
                 });
               }
             },
-            onTapUp: (detial) {
+            onTapUp: (detial) async {
               if (!widget.disabled) {
+                if (await widget.onPressed!(index, widget.type == RingButtonGroupType.MULTIPLE_SELECTABLE ? status._pressed : null)) {
+                  setState(() {
+                    switch (widget.type) {
+                      case RingButtonGroupType.SINGLE_SELECTABLE:
+                        status.pressed.clear();
+                        status.pressed.add(index);
+                        break;
+                      case RingButtonGroupType.MULTIPLE_SELECTABLE:
+                        !status.pressed.remove(index) ? status.pressed.add(index) : null;
+                        break;
+                      default:
+                    }
+                  });
+                }
+
                 setState(() {
-                  switch (widget.type) {
-                    case RingButtonGroupType.SINGLE_SELECTABLE:
-                      status.pressed.clear();
-                      status.pressed.add(index);
-                      break;
-                    case RingButtonGroupType.MULTIPLE_SELECTABLE:
-                      !status.pressed.remove(index) ? status.pressed.add(index) : null;
-                      break;
-                    default:
-                  }
-
-                  widget.onPressed!(index, widget.type == RingButtonGroupType.MULTIPLE_SELECTABLE ? status._pressed : null);
-
                   status._pressedDown = null;
                 });
               }
@@ -373,7 +377,7 @@ class ButtonStatus {
   }
 }
 
-typedef OnPressedFunction = Function(int index, Set<int>? selected);
+typedef OnPressedFunction = Future<bool> Function(int index, Set<int>? selected);
 
 enum RingButtonGroupType { PRESS_ONLY, SINGLE_SELECTABLE, MULTIPLE_SELECTABLE }
 
