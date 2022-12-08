@@ -1,6 +1,6 @@
 name: ring_button_group
 description: provide a configurable component to support a group of buttons displayed on a sized ring.
-version: 1.1.0
+version: 1.1.1
 homepage: https://github.com/xeric/ring_button_group
 
 environment:

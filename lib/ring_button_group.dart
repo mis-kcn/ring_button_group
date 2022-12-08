@@ -53,7 +53,7 @@ class RingButtonGroup extends StatefulWidget {
   final bool shadowEffect;
 
   //the width of line split the button, note that this is not the border of circle
-  final double splitStrokeSize = 0.5;
+  final double splitStrokeSize;
 
   const RingButtonGroup({
     super.key,
@@ -73,6 +73,7 @@ class RingButtonGroup extends StatefulWidget {
     this.labels,
     this.child,
     this.shadowEffect = false,
+    this.splitStrokeSize = 0.5
   })  : assert(buttonNumber > 1),
         assert(labels != null ? labels.length == buttonNumber : true),
         assert(icons != null ? icons.length == buttonNumber : true),
