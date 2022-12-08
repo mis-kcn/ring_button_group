@@ -83,8 +83,9 @@ SizedBox(
 | disableBorderColor | Color              | `Colors.lightBlueAccent` | disabled border color, when color same with borderColor, auto transform to grayscale                                                              |
 | icons              | List<Icon>?        | `null`                   | button icons list, while set, the list length must be same with `buttonNumber`                                                                    |
 | labels             | List<Text>?        | `null`                   | button label list, only works when `icons` is `null`, the list length must be same with `buttonNumber`                                            |
-| child              | Widget?            | null                     | a child of ring button, common case is put a circle in the center for display purpose                                                             |
-| shadowEffect       | bool               | false                    | use a inner shadow effects in pressed/selected button                                                                                             |
+| child              | Widget?            | `null`                     | a child of ring button, common case is put a circle in the center for display purpose                                                             |
+| shadowEffect       | bool               | `false`                    | use a inner shadow effects in pressed/selected button                                                                                             |
+| splitStrokeSize    | double             | `0.5`                    | the width of line split the button, note that this is not the border of circle                                                                                             |
 
 ## RingButtonGroupType
 
