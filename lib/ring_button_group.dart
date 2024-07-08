@@ -45,7 +45,7 @@ class RingButtonGroup extends StatefulWidget {
   final Color borderColor;
 
   //icons on button, size must be same with buttonNumber
-  final List<Icon>? icons;
+  final List<Widget>? icons;
 
   //labels on button, size must be same with buttonNumber
   final List<Text>? labels;
@@ -58,6 +58,9 @@ class RingButtonGroup extends StatefulWidget {
 
   //the width of line split the button, note that this is not the border of circle
   final double splitStrokeSize;
+
+  /// The angle by which to rotate the entire group of buttons.
+  final double rotate;
 
   const RingButtonGroup(
       {super.key,
@@ -76,12 +79,15 @@ class RingButtonGroup extends StatefulWidget {
       this.icons,
       this.labels,
       this.child,
+      this.rotate = 0,
       this.shadowEffect = false,
       this.splitStrokeSize = 0.5})
       : assert(buttonNumber > 1),
         assert(labels != null ? labels.length == buttonNumber : true),
         assert(icons != null ? icons.length == buttonNumber : true),
-        assert(type == RingButtonGroupType.SINGLE_SELECTABLE ? pressedIndex.length < 2 : true);
+        assert(type == RingButtonGroupType.SINGLE_SELECTABLE
+            ? pressedIndex.length < 2
+            : true);
 
   @override
   State<StatefulWidget> createState() => RingButtonGroupState();
@@ -100,91 +106,103 @@ class RingButtonGroupState extends State<RingButtonGroup> {
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
       var widgets = <Widget>[];
-      widgets.addAll([for (var i = 0; i < widget.buttonNumber; i++) i].map((index) => GestureDetector(
-            onTapCancel: () {
-              if (!widget.disabled) {
-                setState(() {
-                  status._pressedDown = null;
-                });
-              }
-            },
-            onTapUp: (detial) async {
-              if (!widget.disabled) {
-                if (await widget.onPressed!(index, widget.type == RingButtonGroupType.MULTIPLE_SELECTABLE ? status._pressed : null)) {
-                  setState(() {
-                    switch (widget.type) {
-                      case RingButtonGroupType.SINGLE_SELECTABLE:
-                        status.pressed.clear();
-                        status.pressed.add(index);
-                        break;
-                      case RingButtonGroupType.MULTIPLE_SELECTABLE:
-                        !status.pressed.remove(index) ? status.pressed.add(index) : null;
-                        break;
-                      default:
+      widgets.addAll([for (var i = 0; i < widget.buttonNumber; i++) i]
+          .map((index) => GestureDetector(
+                onTapCancel: () {
+                  if (!widget.disabled) {
+                    setState(() {
+                      status._pressedDown = null;
+                    });
+                  }
+                },
+                onTapUp: (detial) async {
+                  if (!widget.disabled) {
+                    if (await widget.onPressed!(
+                        index,
+                        widget.type == RingButtonGroupType.MULTIPLE_SELECTABLE
+                            ? status._pressed
+                            : null)) {
+                      setState(() {
+                        switch (widget.type) {
+                          case RingButtonGroupType.SINGLE_SELECTABLE:
+                            status.pressed.clear();
+                            status.pressed.add(index);
+                            break;
+                          case RingButtonGroupType.MULTIPLE_SELECTABLE:
+                            !status.pressed.remove(index)
+                                ? status.pressed.add(index)
+                                : null;
+                            break;
+                          default:
+                        }
+                      });
                     }
-                  });
-                }
 
-                setState(() {
-                  status._pressedDown = null;
-                });
-              }
-            },
-            onTapDown: (detial) {
-              setState(() {
-                status._pressedDown = index;
-              });
-            },
-            child: FractionallySizedBox(
-                widthFactor: 1,
-                heightFactor: 1,
-                child: Stack(
-                  children: [
-                    FractionallySizedBox(
-                      widthFactor: 1,
-                      heightFactor: 1,
-                      child: CustomPaint(
-                          painter: RingButtonPainter(
-                              toneColor: widget.toneColor,
-                              tintColor: widget.tintColor,
-                              activeColor: widget.activeColor,
-                              disableColor: widget.disableColor,
-                              disableBorderColor: widget.disableBorderColor,
-                              borderColor: widget.borderColor,
-                              buttonNumber: widget.buttonNumber,
-                              buttonSize: widget.buttonSize,
-                              buttonIndex: index,
-                              pressed: status.pressed.contains(index),
-                              disabled: widget.disabled,
-                              shadowEffect: widget.shadowEffect,
-                              splitStrokeSize: widget.splitStrokeSize,
-                              pressDown: status._pressedDown == index)),
-                    ),
-                    RingButtonIcon(
-                      index: index,
-                      buttonSize: widget.buttonSize,
-                      size: constraints.minWidth,
-                      total: widget.buttonNumber,
-                      child: FractionalTranslation(
-                          translation: const Offset(-0.5, -0.5),
-                          child: widget.icons != null
-                              ? widget.icons![index]
-                              : widget.labels != null
-                                  ? widget.labels![index]
-                                  : null),
-                    ),
-                  ],
-                )),
-          )));
+                    setState(() {
+                      status._pressedDown = null;
+                    });
+                  }
+                },
+                onTapDown: (detial) {
+                  setState(() {
+                    status._pressedDown = index;
+                  });
+                },
+                child: FractionallySizedBox(
+                    widthFactor: 1,
+                    heightFactor: 1,
+                    child: Stack(
+                      children: [
+                        FractionallySizedBox(
+                          widthFactor: 1,
+                          heightFactor: 1,
+                          child: CustomPaint(
+                              painter: RingButtonPainter(
+                                  toneColor: widget.toneColor,
+                                  tintColor: widget.tintColor,
+                                  activeColor: widget.activeColor,
+                                  disableColor: widget.disableColor,
+                                  disableBorderColor: widget.disableBorderColor,
+                                  borderColor: widget.borderColor,
+                                  buttonNumber: widget.buttonNumber,
+                                  buttonSize: widget.buttonSize,
+                                  buttonIndex: index,
+                                  pressed: status.pressed.contains(index),
+                                  disabled: widget.disabled,
+                                  shadowEffect: widget.shadowEffect,
+                                  splitStrokeSize: widget.splitStrokeSize,
+                                  pressDown: status._pressedDown == index)),
+                        ),
+                        RingButtonIcon(
+                          index: index,
+                          buttonSize: widget.buttonSize,
+                          size: constraints.minWidth,
+                          total: widget.buttonNumber,
+                          child: FractionalTranslation(
+                              translation: const Offset(-0.5, -0.5),
+                              child: widget.icons != null
+                                  ? widget.icons![index]
+                                  : widget.labels != null
+                                      ? widget.labels![index]
+                                      : null),
+                        ),
+                      ],
+                    )),
+              )));
       widgets.add(IgnorePointer(
         ignoring: true,
         child: Container(
           width: double.infinity,
           height: double.infinity,
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(MediaQuery.of(context).size.height),
+              borderRadius:
+                  BorderRadius.circular(MediaQuery.of(context).size.height),
               border: Border.all(
-                color: widget.disabled ? (widget.disableBorderColor == widget.borderColor ? getGreyScale(widget.borderColor) : widget.disableBorderColor) : widget.borderColor,
+                color: widget.disabled
+                    ? (widget.disableBorderColor == widget.borderColor
+                        ? getGreyScale(widget.borderColor)
+                        : widget.disableBorderColor)
+                    : widget.borderColor,
                 width: 0.5,
                 style: BorderStyle.solid,
               )),
@@ -194,9 +212,14 @@ class RingButtonGroupState extends State<RingButtonGroup> {
               width: double.infinity,
               height: double.infinity,
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(MediaQuery.of(context).size.height),
+                  borderRadius:
+                      BorderRadius.circular(MediaQuery.of(context).size.height),
                   border: Border.all(
-                    color: widget.disabled ? (widget.disableBorderColor == widget.borderColor ? getGreyScale(widget.borderColor) : widget.disableBorderColor) : widget.borderColor,
+                    color: widget.disabled
+                        ? (widget.disableBorderColor == widget.borderColor
+                            ? getGreyScale(widget.borderColor)
+                            : widget.disableBorderColor)
+                        : widget.borderColor,
                     width: 0.5,
                     style: BorderStyle.solid,
                   )),
@@ -224,7 +247,13 @@ class RingButtonIcon extends Positioned {
   final double buttonSize;
   //double right;
 
-  RingButtonIcon({super.key, required this.index, required this.total, required this.buttonSize, required this.size, required super.child})
+  RingButtonIcon(
+      {super.key,
+      required this.index,
+      required this.total,
+      required this.buttonSize,
+      required this.size,
+      required super.child})
       : super(
           left: calcLeft(total, index, buttonSize, size),
           top: calcTop(total, index, buttonSize, size),
@@ -232,12 +261,14 @@ class RingButtonIcon extends Positioned {
 
   static double calcLeft(int total, int index, double buttonSize, double size) {
     double angle01 = 360 / total * index + 360 / total / 2;
-    return math.sin(math.pi * angle01 / 180) * (size / 2 - buttonSize / 2) + size / 2;
+    return math.sin(math.pi * angle01 / 180) * (size / 2 - buttonSize / 2) +
+        size / 2;
   }
 
   static double calcTop(int total, int index, double buttonSize, double size) {
     double angle01 = 360 / total * index + 360 / total / 2;
-    return size / 2 - math.cos(math.pi * (360 - angle01) / 180) * (size / 2 - buttonSize / 2);
+    return size / 2 -
+        math.cos(math.pi * (360 - angle01) / 180) * (size / 2 - buttonSize / 2);
   }
 }
 
@@ -303,13 +334,21 @@ class RingButtonPainter extends CustomPainter {
     var shadowPaint = shadowEffect
         ? (Paint()
           ..color = activeColor.withAlpha(245)
-          ..maskFilter = MaskFilter.blur(BlurStyle.inner, convertRadiusToSigma(buttonSize / 5)))
+          ..maskFilter = MaskFilter.blur(
+              BlurStyle.inner, convertRadiusToSigma(buttonSize / 5)))
         : null;
 
     double innerRadius = size.width / 2 - buttonSize;
     double outterRadius = size.width / 2;
 
-    _drawButton(canvas, paintStroke, paintFill, !disabled && pressed ? shadowPaint : null, path, innerRadius, outterRadius,
+    _drawButton(
+        canvas,
+        paintStroke,
+        paintFill,
+        !disabled && pressed ? shadowPaint : null,
+        path,
+        innerRadius,
+        outterRadius,
         _calcOffsets(buttonIndex, innerRadius, outterRadius, size.width / 2));
   }
 
@@ -317,31 +356,48 @@ class RingButtonPainter extends CustomPainter {
     return radius * 0.57735 + 0.1;
   }
 
-  List<Offset> _calcOffsets(int index, double innerRadius, double outterRadius, double base) {
+  List<Offset> _calcOffsets(
+      int index, double innerRadius, double outterRadius, double base) {
     double angle01 = 360 / buttonNumber * index;
     // print(angle01);
     double p0x = math.sin(math.pi * angle01 / 180) * innerRadius + base;
     double p0y = base - math.cos(math.pi * (360 - angle01) / 180) * innerRadius;
 
     double p1x = math.sin(math.pi * angle01 / 180) * outterRadius + base;
-    double p1y = base - math.cos(math.pi * (360 - angle01) / 180) * outterRadius;
+    double p1y =
+        base - math.cos(math.pi * (360 - angle01) / 180) * outterRadius;
 
     double angle23 = 360 / buttonNumber * (index + 1);
     double p3x = math.sin(math.pi * angle23 / 180) * innerRadius + base;
     double p3y = base - math.cos(math.pi * (360 - angle23) / 180) * innerRadius;
 
     double p2x = math.sin(math.pi * angle23 / 180) * outterRadius + base;
-    double p2y = base - math.cos(math.pi * (360 - angle23) / 180) * outterRadius;
+    double p2y =
+        base - math.cos(math.pi * (360 - angle23) / 180) * outterRadius;
 
-    return [Offset(p0x, p0y), Offset(p1x, p1y), Offset(p2x, p2y), Offset(p3x, p3y)];
+    return [
+      Offset(p0x, p0y),
+      Offset(p1x, p1y),
+      Offset(p2x, p2y),
+      Offset(p3x, p3y)
+    ];
   }
 
-  void _drawButton(Canvas canvas, Paint paintStroke, Paint paintFill, Paint? shadowPaint, Path path, double innerRadius, double outterRadius, List<Offset> offsets) {
+  void _drawButton(
+      Canvas canvas,
+      Paint paintStroke,
+      Paint paintFill,
+      Paint? shadowPaint,
+      Path path,
+      double innerRadius,
+      double outterRadius,
+      List<Offset> offsets) {
     path.moveTo(offsets[0].dx, offsets[0].dy);
     path.lineTo(offsets[1].dx, offsets[1].dy);
     path.arcToPoint(offsets[2], radius: Radius.circular(outterRadius));
     path.lineTo(offsets[3].dx, offsets[3].dy);
-    path.arcToPoint(offsets[0], radius: Radius.circular(innerRadius), clockwise: false);
+    path.arcToPoint(offsets[0],
+        radius: Radius.circular(innerRadius), clockwise: false);
     path.close();
 
     canvas.drawPath(path, paintFill);
@@ -377,11 +433,14 @@ class ButtonStatus {
   }
 }
 
-typedef OnPressedFunction = Future<bool> Function(int index, Set<int>? selected);
+typedef OnPressedFunction = Future<bool> Function(
+    int index, Set<int>? selected);
 
 enum RingButtonGroupType { PRESS_ONLY, SINGLE_SELECTABLE, MULTIPLE_SELECTABLE }
 
 Color getGreyScale(Color orginalColor) {
-  int gray = (orginalColor.red * 0.199).toInt() + (orginalColor.green * 0.387).toInt() + (orginalColor.blue * 0.414).toInt();
+  int gray = (orginalColor.red * 0.199).toInt() +
+      (orginalColor.green * 0.387).toInt() +
+      (orginalColor.blue * 0.414).toInt();
   return Color.fromARGB(orginalColor.alpha, gray, gray, gray);
 }
