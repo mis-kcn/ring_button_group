@@ -1,7 +1,5 @@
 library ring_button_group;
 
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
@@ -436,6 +434,7 @@ class ButtonStatus {
 typedef OnPressedFunction = Future<bool> Function(
     int index, Set<int>? selected);
 
+// ignore: constant_identifier_names
 enum RingButtonGroupType { PRESS_ONLY, SINGLE_SELECTABLE, MULTIPLE_SELECTABLE }
 
 Color getGreyScale(Color orginalColor) {
